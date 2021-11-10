@@ -11,6 +11,8 @@ void nurseMenu();
 bool nurseLogin(string username, string password);
 bool doctorLogin(string username, string password);
 
+int userType = 0;
+
 string nurseUsername = "abc", nursePassword = "123";
 string doctorUsername = "abc", doctorPassword = "123";
 
@@ -39,7 +41,7 @@ struct treatNode* treatHead = NULL;
 patient_data addPatient();
 Node* searchPatientbyID();
 void displayPatient(), removePatient(), treatPatient(), sortPatient(), ascSort(), displayTreated(), insertAtEnd(patient_data data), insertAtEndTreated(patient_data data);
-void DoctorSearchOption(), VisitSearchByID(treatNode* temp), VisitSearchByName();;
+void DoctorSearchOption(), VisitSearchByID(treatNode* temp), VisitSearchByName();
 int patientCount();
 
 
@@ -236,7 +238,7 @@ bool nurseLogin(string username, string password)
         system("CLS");
 
         cout << " Login Credentials Accepted\n";
-       
+        userType = 1;
         return true;
 
     }
@@ -263,13 +265,14 @@ bool doctorLogin(string username, string password){
         cin.ignore();
         system("CLS");
         cout << " Login Credentials Accepted\n";
-       
+        userType = 2;
         return true;
     }
 }
 
 void nurseMenu()
 {
+    userType = 1;
     int selection = 0;
     cout << "************************************************************** \n";
     cout << "Welcome to Nurse Menu \n";
@@ -308,7 +311,6 @@ void nurseMenu()
         cin.ignore();
         system("CLS");
         sortPatient();
-        //nurseMenu();
         cout << "Patient sorted." << endl;
         nurseMenu();
     }
@@ -388,6 +390,7 @@ void nurseMenu()
 
 void doctorMenu(){
 
+    userType = 2;
 	int selection = 0;
     cout << "************************************************************** \n";
     cout << "Welcome to Doctor Menu \n";
@@ -540,7 +543,20 @@ void displayPatient()
         system("CLS");
 
         cout << "\n List is empty.\n";
-        nurseMenu();
+        if(userType == 1){
+            system("CLS");
+            nurseMenu();
+        }
+        else if(userType == 2){
+            system("CLS");
+            doctorMenu();
+        }
+        else{
+            system("CLS");
+            start_menu();
+        }
+        
+        
     }
 
     Node* current = head;
@@ -596,14 +612,24 @@ void displayTreated(){
         system("CLS");
 
         cout << "\n List is empty.\n";
-        nurseMenu();
+        if(userType == 1){
+            system("CLS");
+            nurseMenu();
+        }
+        else if(userType == 2){
+            system("CLS");
+            doctorMenu();
+        }
+        else{
+            system("CLS");
+            start_menu();
+        }
     }
 
     treatNode* current = treatHead;
 
     cout << "**************************************************************\n";
     cout << "Patient List    :\n";
-    //cout << "\n ID\t"<<"Name\t\t\t\t" << "Gender \t" << "Phone \t\t" << "Address \t\t\t" << "Visit Date \t\t" << "Visit Time \t\t" << "Disability Option \t\n";
 
     printElement("ID ", smallWidth);
     printElement("Name", largeWidth);
@@ -619,8 +645,6 @@ void displayTreated(){
     
     while (current!=NULL)
     {
-        //cout <<" "<< current->data.id << "\t" << current->data.firstName << " " << current->data.lastName << "\t\t" << current->data.gender << "\t" << current->data.phone << "\t\t" << current->data.address << "\t\t"
-        //    << current->data.visitDate << "\t\t" << current->data.visitTime << "\t\t\t" << current->data.disabilityOption << "\t\n";
 
         printElement(current->data.id, smallWidth);
         printElement((current->data.firstName)+" "+ (current->data.lastName), largeWidth);
@@ -653,7 +677,18 @@ Node* searchPatientbyID( string id)
         system("CLS");
 
         cout << "\n List is empty.\n";
-        nurseMenu();
+        if(userType == 1){
+            system("CLS");
+            nurseMenu();
+        }
+        else if(userType == 2){
+            system("CLS");
+            doctorMenu();
+        }
+        else{
+            system("CLS");
+            start_menu();
+        }
     }
 
 
@@ -666,7 +701,18 @@ Node* searchPatientbyID( string id)
     if (temp->data.id != id)
     {
         cout << "Not found\n\n";
-        nurseMenu();
+        if(userType == 1){
+            system("CLS");
+            nurseMenu();
+        }
+        else if(userType == 2){
+            system("CLS");
+            doctorMenu();
+        }
+        else{
+            system("CLS");
+            start_menu();
+        }
     }
 
     found = temp;
@@ -1116,7 +1162,7 @@ void DoctorSearchOption(){
     cout << "1. Search by ID and modify\n";
     cout << "2. Search by first name and display\n";
     cout << "3. Back to menu\n";
-    cout << "Enter option: "
+    cout << "Enter option: ";
     cin >> selection;
 
     switch (selection){
@@ -1151,7 +1197,6 @@ void VisitSearchByID(treatNode* temp){
     //treatNode* temp = treatHead;
 
     string idRef;
-    int compare;
 
     if (temp == NULL)
     {
@@ -1160,7 +1205,18 @@ void VisitSearchByID(treatNode* temp){
         system("CLS");
 
         cout << "\n List is empty.\n";
-        start_menu();
+        if(userType == 1){
+            system("CLS");
+            nurseMenu();
+        }
+        else if(userType == 2){
+            system("CLS");
+            doctorMenu();
+        }
+        else{
+            system("CLS");
+            start_menu();
+        }
     }
 
     cout << "Enter patient ID: ";
@@ -1280,9 +1336,69 @@ void VisitSearchByID(treatNode* temp){
 }
 
 void VisitSearchByName(){
+
+    treatNode* temp = treatHead;
+
+    string fNameRef;
+
+    if (temp == NULL)
+    {
+        cin.clear();
+        cin.ignore();
+        system("CLS");
+
+        cout << "\n List is empty.\n";
+        if(userType == 1){
+            system("CLS");
+            nurseMenu();
+        }
+        else if(userType == 2){
+            system("CLS");
+            doctorMenu();
+        }
+        else{
+            system("CLS");
+            start_menu();
+        }
+    }
+
+    cout << "Enter patient first name (case sensitive): ";
+    cin >> fNameRef;
+
     system("CLS");
-    cout << "pog kekw";
-    doctorMenu();
+
+    cout << "**************************************************************\n";
+    cout << "Patient List    :\n";
+
+    printElement("ID ", smallWidth);
+    printElement("Name", largeWidth);
+    printElement("Gender", smallWidth);
+    printElement("Phone", midWidth);
+    printElement("Visit Date", midWidth);
+    printElement("Visit Time", midWidth);
+    printElement("Disability Option", largeWidth);
+	printElement("Doctor Name", largeWidth);
+	printElement("Medicine", smallWidth);
+    cout << endl;
+
+    while (temp != NULL){
+        if(temp->data.firstName == fNameRef){
+			printElement(temp->data.id, smallWidth);
+            printElement((temp->data.firstName)+" "+ (temp->data.lastName), largeWidth);
+            printElement(temp->data.gender, smallWidth);
+            printElement(temp->data.phone, midWidth);
+            printElement(temp->data.visitDate, midWidth);
+            printElement(temp->data.visitTime, midWidth);
+            printElement(temp->data.disabilityOption, largeWidth);
+		    printElement(temp->data.doctorName, largeWidth);
+		    printElement(temp->data.medicine, smallWidth);
+            cout << endl;
+		}
+        temp = temp->next;
+    }
+
+    cout << "\n\n";
+    system("pause");
 }
 
 void addDummyData()
