@@ -37,16 +37,11 @@ struct treatNode
 struct treatNode* treatHead = NULL;
 
 patient_data addPatient();
-void displayPatient();
 Node* searchPatientbyID();
-void removePatient();
-void treatPatient();
-void sortPatient();
-void ascSort();
+void displayPatient(), removePatient(), treatPatient(), sortPatient(), ascSort(), displayTreated(), insertAtEnd(patient_data data), insertAtEndTreated(patient_data data);
+void DoctorSearchOption(), VisitSearchByID(treatNode* temp), VisitSearchByName();;
 int patientCount();
-void displayTreated();
-void insertAtEnd(patient_data data);
-void insertAtEndTreated(patient_data data);
+
 
 void insertAtEnd(patient_data data)       
 {
@@ -290,7 +285,7 @@ void nurseMenu()
 
     cout << "Current Patient Queue Count :" << patientCount() << endl;
 
-    cout << "\n Selection \t:";
+    cout << "\n Selection \t: ";
     cin >> selection;
     //cout << "************************************************************** \n";
     switch (selection)
@@ -398,27 +393,42 @@ void doctorMenu(){
     cout << "Welcome to Doctor Menu \n";
     cout << " Please choose from the following options - \n";
     cout << " 1. Display Patient.\n";
-    cout << " 2. Sort Patient.\n";
-    cout << " 3. Display Patient.\n";
-    cout << " 7. Exit.\n";
+    cout << " 2. Display Treated Patient.\n";
+    cout << " 3. Search Patient.\n";
+    cout << " 5. Exit.\n";
 
     cout << "Current Patient Queue Count :" << patientCount() << endl;
 
-    cout << "\n Selection \t:";
+    cout << "\n Selection \t: ";
     cin >> selection;
     //cout << "************************************************************** \n";
     switch (selection){
     	case 1:
+
 			displayPatient();
         	system("CLS");
         	doctorMenu();
 			break;
+
 		case 2:
-			break;
+
+            displayTreated();
+            system("CLS");
+            doctorMenu();
+            break;
+
 		case 3:
+
+            system("CLS");
+            DoctorSearchOption();
+            system("CLS");
+            doctorMenu();
 			break;
+
 		case 4:
+
 			break;
+
 		case 5:
             start_menu();
 			break;
@@ -1097,6 +1107,182 @@ int patientCount()
 
     return sum;
     
+}
+
+void DoctorSearchOption(){
+
+    int selection;
+    cout << "Available options: \n";
+    cout << "1. Search by ID and modify\n";
+    cout << "2. Search by first name and display\n";
+    cout << "3. Back to menu\n";
+    cout << "Enter option: "
+    cin >> selection;
+
+    switch (selection){
+    case 1:
+
+        system("CLS");
+        VisitSearchByID(treatHead);
+        break;
+
+    case 2:
+
+        system("CLS");
+        VisitSearchByName();
+        break;
+    
+    case 3:
+
+        system("CLS");
+        break;
+        
+    default:
+
+        system("CLS");
+        cout << "Error input, please try again\n";
+        DoctorSearchOption();
+        break;
+    }
+}
+
+void VisitSearchByID(treatNode* temp){
+    
+    //treatNode* temp = treatHead;
+
+    string idRef;
+    int compare;
+
+    if (temp == NULL)
+    {
+        cin.clear();
+        cin.ignore();
+        system("CLS");
+
+        cout << "\n List is empty.\n";
+        start_menu();
+    }
+
+    cout << "Enter patient ID: ";
+    cin >> idRef;
+
+    while (temp != NULL){
+
+		if(temp->data.id == idRef){
+
+            cin.clear();
+            cin.ignore();
+            system("CLS");
+
+			printElement("ID ", smallWidth);
+            printElement("Name", largeWidth);
+            printElement("Gender", smallWidth);
+            printElement("Phone", midWidth);
+            printElement("Visit Date", midWidth);
+            printElement("Visit Time", midWidth);
+            printElement("Disability Option", largeWidth);
+	        printElement("Doctor Name", largeWidth);
+	        printElement("Medicine", smallWidth);
+            cout << endl;
+
+            printElement(temp->data.id, smallWidth);
+            printElement((temp->data.firstName)+" "+ (temp->data.lastName), largeWidth);
+            printElement(temp->data.gender, smallWidth);
+            printElement(temp->data.phone, midWidth);
+            printElement(temp->data.visitDate, midWidth);
+            printElement(temp->data.visitTime, midWidth);
+            printElement(temp->data.disabilityOption, largeWidth);
+		    printElement(temp->data.doctorName, largeWidth);
+		    printElement(temp->data.medicine, smallWidth);
+            cout << endl;
+
+            int selection;
+            
+            cout << "Modify data?\n";
+            cout << "1. Yes\n";
+            cout << "2. No\n";
+            cout << "Enter option: ";
+            cin >> selection;
+
+            switch (selection){
+                case 1:{
+                
+                    string nPhone, nDoc, nMed;
+
+                    cout << "Enter new phone number: ";
+                    cin >> nPhone;
+                    cout << "Enter new assigned doctor: ";
+                    cin >> nDoc;
+                    cout << "Enter new medicine: ";
+                    cin >> nMed;
+
+                    temp->data.phone = nPhone;
+                    temp->data.doctorName = nDoc;
+                    temp->data.medicine = nMed;
+
+                    system("CLS");
+
+                    cout << "New data:\n";
+                    printElement("ID ", smallWidth);
+                    printElement("Name", largeWidth);
+                    printElement("Gender", smallWidth);
+                    printElement("Phone", midWidth);
+                    printElement("Visit Date", midWidth);
+                    printElement("Visit Time", midWidth);
+                    printElement("Disability Option", largeWidth);
+	                printElement("Doctor Name", largeWidth);
+	                printElement("Medicine", smallWidth);
+                    cout << endl;
+
+                    printElement(temp->data.id, smallWidth);
+                    printElement((temp->data.firstName)+" "+ (temp->data.lastName), largeWidth);
+                    printElement(temp->data.gender, smallWidth);
+                    printElement(temp->data.phone, midWidth);
+                    printElement(temp->data.visitDate, midWidth);
+                    printElement(temp->data.visitTime, midWidth);
+                    printElement(temp->data.disabilityOption, largeWidth);
+		            printElement(temp->data.doctorName, largeWidth);
+		            printElement(temp->data.medicine, smallWidth);
+                    cout << endl;
+
+                    cout << "\n\n";
+                    system("pause");
+                    break;
+            
+                }
+                case 2:{
+                
+                    system("CLS");
+                    cout << "Returning to menu";
+                    doctorMenu();
+                    break;
+
+                }
+
+                default:{
+
+                    system("CLS");
+                    cout << "Error input, returning to menu\n";
+                    doctorMenu();
+                    break;
+
+                }
+
+		    }
+        }
+
+		temp = temp->next;
+	}
+
+    doctorMenu();
+
+
+}
+
+void VisitSearchByName(){
+    system("CLS");
+    cout << "pog kekw";
+    doctorMenu();
 }
 
 void addDummyData()
