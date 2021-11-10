@@ -1482,9 +1482,13 @@ void VisitSearchByID(treatNode* temp){
     cout << "Enter patient ID: ";
     cin >> idRef;
 
+    int flag = 0;
+
     while (temp != NULL){
 
 		if(temp->data.id == idRef){
+            
+            flag = 1;
 
             cin.clear();
             cin.ignore();
@@ -1618,6 +1622,11 @@ void VisitSearchByID(treatNode* temp){
 		temp = temp->next;
 	}
 
+    if(flag == 0){
+        cout << "Patient not found\n";
+        system("pause");
+    }
+
     doctorMenu();
 
 
@@ -1669,8 +1678,11 @@ void VisitSearchByFirstName(){
 	printElement("Medicine", smallWidth);
     cout << endl;
 
+    int flag = 0;
+
     while (temp != NULL){
         if(temp->data.firstName == fNameRef){
+            flag = 1;
 			printElement(temp->data.id, smallWidth);
             printElement((temp->data.firstName)+" "+ (temp->data.lastName), largeWidth);
             printElement(temp->data.gender, smallWidth);
@@ -1685,6 +1697,10 @@ void VisitSearchByFirstName(){
         temp = temp->next;
     }
 
+    if(flag == 0){
+        cout << "Patient not found\n";
+        system("pause");
+    }
     cout << "\n\n";
     system("pause");
 }
@@ -1734,8 +1750,11 @@ void VisitSearchByLastName(){
 	printElement("Medicine", smallWidth);
     cout << endl;
 
+    int flag = 0;
+
     while (temp != NULL){
         if(temp->data.lastName == lNameRef){
+            flag = 1;
 			printElement(temp->data.id, smallWidth);
             printElement((temp->data.firstName)+" "+ (temp->data.lastName), largeWidth);
             printElement(temp->data.gender, smallWidth);
@@ -1748,6 +1767,11 @@ void VisitSearchByLastName(){
             cout << endl;
 		}
         temp = temp->next;
+    }
+
+    if(flag == 0){
+        cout << "Patient not found\n";
+        system("pause");
     }
 
     cout << "\n\n";
@@ -1817,8 +1841,11 @@ void VisitSearchByGender(){
 	printElement("Medicine", smallWidth);
     cout << endl;
 
+    int flag = 0;
+
     while (temp != NULL){
         if(temp->data.gender == gender){
+            flag = 1;
 			printElement(temp->data.id, smallWidth);
             printElement((temp->data.firstName)+" "+ (temp->data.lastName), largeWidth);
             printElement(temp->data.gender, smallWidth);
@@ -1831,6 +1858,11 @@ void VisitSearchByGender(){
             cout << endl;
 		}
         temp = temp->next;
+    }
+
+    if(flag == 0){
+        cout << "Patient not found\n";
+        system("pause");
     }
 
     cout << "\n\n";
@@ -1882,8 +1914,11 @@ void VisitSearchByDoctor(){
 	printElement("Medicine", smallWidth);
     cout << endl;
 
+    int flag = 0;
+
     while (temp != NULL){
         if(temp->data.doctorName == dNameRef){
+            flag = 1;
 			printElement(temp->data.id, smallWidth);
             printElement((temp->data.firstName)+" "+ (temp->data.lastName), largeWidth);
             printElement(temp->data.gender, smallWidth);
@@ -1896,6 +1931,11 @@ void VisitSearchByDoctor(){
             cout << endl;
 		}
         temp = temp->next;
+    }
+
+    if(flag == 0){
+        cout << "Patient not found\n";
+        system("pause");
     }
 
     cout << "\n\n";
@@ -1966,8 +2006,11 @@ void VisitSearchByDisabled(){
 	printElement("Medicine", smallWidth);
     cout << endl;
 
+    int flag = 0;
+
     while (temp != NULL){
         if(temp->data.disabilityOption == disabled){
+            flag = 1;
 			printElement(temp->data.id, smallWidth);
             printElement((temp->data.firstName)+" "+ (temp->data.lastName), largeWidth);
             printElement(temp->data.gender, smallWidth);
@@ -1980,6 +2023,11 @@ void VisitSearchByDisabled(){
             cout << endl;
 		}
         temp = temp->next;
+    }
+
+    if(flag == 0){
+        cout << "Patient not found\n";
+        system("pause");
     }
 
     cout << "\n\n";
