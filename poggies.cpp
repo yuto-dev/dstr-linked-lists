@@ -40,7 +40,7 @@ struct treatNode* treatHead = NULL;
 
 patient_data addPatient();
 Node* searchPatientbyID();
-void displayPatient(), removePatient(), treatPatient(), sortPatient(), ascSort(), displayTreated(), insertAtEnd(patient_data data), insertAtEndTreated(patient_data data);
+void displayPatient(), removePatient(), treatPatient(), sortPatient(), ascSort(), displayTreated(), insertAtEnd(patient_data data), insertAtEndTreated(patient_data data), sortTreatPatient(), descSort();
 void DoctorSearchOption(), VisitSearchByID(treatNode* temp), VisitSearchByFirstName(), VisitSearchByDisabled();
 int patientCount();
 
@@ -399,7 +399,9 @@ void doctorMenu(){
     cout << " 1. Display Patient.\n";
     cout << " 2. Display Treated Patient.\n";
     cout << " 3. Search Patient.\n";
-    cout << " 5. Log out.\n";
+    cout << " 4. Sort Patient.\n";
+    cout << " 5. Display Patient Page by Page (Descending).\n";
+    cout << " 6. Log out.\n";
 
     cout << "Current Patient Queue Count :" << patientCount() << endl;
 
@@ -431,11 +433,25 @@ void doctorMenu(){
 
 		case 4:
 
+            cin.clear();
+            cin.ignore();
+            system("CLS");
+            sortTreatPatient();
+            cout << "Patient sorted." << endl;
+            doctorMenu();
 			break;
 
-		case 5:
+        case 5:
+            descSort();
+            system("CLS");
+            doctorMenu();
+            break;
+
+		case 6:
+
             start_menu();
 			break;
+
 		default:
 			cin.clear();
         	cin.ignore();
@@ -996,6 +1012,138 @@ void sortPatient()
     return;
 }
 
+void sortTreatPatient()
+{
+    int swapped;
+    treatNode* current = treatHead;
+    treatNode* temp = NULL;
+
+    if (treatHead == NULL)
+    {
+        cin.clear();
+        cin.ignore();
+        system("CLS");
+
+        cout << "\n List is empty.\n";
+        nurseMenu();
+    }
+
+    do            //bubble sort
+    {
+        swapped = 0;
+        current = treatHead;
+
+        while (current->next != temp)
+        {
+            int near; int later;
+            vector<string> date_v1;
+            vector<string> date_v2;
+            stringstream s1(current->data.visitDate);
+            while (s1.good())
+            {
+                string substr;
+                getline(s1, substr, '.');
+                date_v1.push_back(substr);
+            }
+
+            stringstream s2(current->next->data.visitDate);
+            while (s2.good())
+            {
+                string substr;
+                getline(s2, substr, '.');
+                date_v2.push_back(substr);
+            }
+
+
+            if (date_v1[1] < date_v2[1])              //comparing by month
+            {
+                swap(current->data, current->next->data);
+                swapped = 1;
+            }
+            else if (date_v1[1] == date_v2[1])              //comparing by date
+            {
+                if (date_v1[0] < date_v2[0])
+                {
+                    swap(current->data, current->next->data);
+                    swapped = 1;
+
+                }
+                else if (date_v1[0] == date_v2[0])  //comparing by time
+                {
+                    int soon, late;
+                    vector<string> time_v1;
+                    vector<string> time_v2;
+                    stringstream ss1(current->data.visitTime);
+                    while (ss1.good())
+                    {
+                        string substr;
+                        getline(ss1, substr, '.');
+                        time_v1.push_back(substr);
+                    }
+
+                    stringstream ss2(current->next->data.visitTime);
+                    while (ss2.good())
+                    {
+                        string substr;
+                        getline(ss2, substr, '.');
+                        time_v2.push_back(substr);
+                    }
+
+                    if (time_v1[0] < time_v2[0]) //comparing by hour
+                    {
+                        swap(current->data, current->next->data);
+                        swapped = 1;
+                    }
+                    else if (time_v1[0] == time_v2[0])  //comparing by minutes
+                    {
+                        int now, comparing;
+                        
+                        if (current->data.disabilityOption == "yes")    //comparing by disability option
+                        {
+                            now = 1;
+                        }
+                        else
+                        {
+                            now = 0;
+                        }
+
+                        if (current->next->data.disabilityOption=="yes")
+                        {
+                            comparing = 1;
+                        }
+                        else
+                        {
+                            comparing = 0;
+                        }
+
+
+
+                        if (now > comparing )
+                        {
+                            swap(current->data, current->next->data);
+                            swapped = 1;
+                        }
+                        else if (now = comparing)       //comparing by time if both disbility options are the same.
+                        {
+
+                            if (time_v1[1] < time_v2[1])
+                            {
+                                swap(current->data, current->next->data);
+                                swapped = 1;
+                            }
+                        }
+                    }
+                }
+            }
+            current = current->next;
+        }
+        temp = current;
+
+    } while (swapped);
+
+    return;
+}
+
 void ascSort()
 {
     sortPatient();
@@ -1076,7 +1224,7 @@ void ascSort()
 
         cout << endl;
 
-        cout << "\n\n\n 1.Next |\t2. Previous |\t0.Exit to Menu |\n";
+        cout << "\n\n\n 1.Previous |\t2. Next |\t0.Exit to Menu |\n";
         cout << "Select :";
         cin >> decision;
         cin.ignore();
@@ -1086,8 +1234,8 @@ void ascSort()
         case 1:
             if (current->next != NULL)
             {
-                current = current->next;
-                i++;
+                current = current->prev;
+                i--;
 
 
             }
@@ -1101,8 +1249,8 @@ void ascSort()
         case 2:
             if (current->prev != NULL)
             {
-                current = current->prev;
-                i--;
+                current = current->next;
+                i++;
             }
             else
             {
@@ -1120,6 +1268,135 @@ void ascSort()
         }
         system("CLS");
     }
+
+
+}
+
+void descSort()
+{
+    sortTreatPatient();
+
+    if (treatHead == NULL)
+    {
+        cin.clear();
+        cin.ignore();
+        system("CLS");
+
+        cout << "\n List is empty.\n";
+        doctorMenu();
+    }
+
+    system("CLS");
+    treatNode* current;
+
+    current = treatHead;
+
+    int i = 1, decision = 1;
+
+    while (decision!=0)
+    {
+        
+        printElement(" ", largeWidth);
+        printElement("Position ", largeWidth);
+        cout << ": ";
+        printElement(i, smallWidth);
+        cout << endl;
+
+        printElement(" ", largeWidth);
+        printElement("ID ", largeWidth);
+        cout << ": ";
+        printElement(current->data.id, smallWidth);
+        cout << endl;
+
+        printElement(" ", largeWidth);
+        printElement("Name ", largeWidth);
+        cout << ": ";
+        printElement((current->data.firstName) + " " + (current->data.lastName), largeWidth);
+        cout << endl;
+
+        printElement(" ", largeWidth);
+        printElement("Gender ", largeWidth);
+        cout << ": ";
+        printElement(current->data.gender, smallWidth);
+        cout << endl;
+
+        printElement(" ", largeWidth);
+        printElement("Phone ", largeWidth);
+        cout << ": ";
+        printElement(current->data.phone, midWidth);
+        cout << endl;
+
+        printElement(" ", largeWidth);
+        printElement("Address ", largeWidth);
+        cout << ": ";
+        printElement(current->data.address, largeWidth);
+        cout << endl;
+
+        printElement(" ", largeWidth);
+        printElement("Visit Date ", largeWidth);
+        cout << ": ";
+        printElement(current->data.visitDate, midWidth);
+        cout << endl;
+
+        printElement(" ", largeWidth);
+        printElement("Visit Time ", largeWidth);
+        cout << ": ";
+        printElement(current->data.visitTime, midWidth);
+        cout << endl;
+
+        printElement(" ", largeWidth);
+        printElement("Disability Option ", largeWidth);
+        cout << ": ";
+        printElement(current->data.disabilityOption, midWidth);
+        cout << endl;
+
+        cout << endl;
+
+        cout << "\n\n\n 1.Previous |\t2. Next |\t0.Exit to Menu |\n";
+        cout << "Select :";
+        cin >> decision;
+        cin.ignore();
+
+        switch (decision)
+        {
+        case 1:
+            if (current->next != NULL)
+            {
+                current = current->prev;
+                i--;
+
+
+            }
+            else
+            {
+                cout << "There is no more patient!" << endl;
+                system("pause");
+            }
+            break;
+
+        case 2:
+            if (current->prev != NULL)
+            {
+                current = current->next;
+                i++;
+            }
+            else
+            {
+                cout << "There is no more patient!" << endl;
+                system("pause");
+            }
+            break;
+        case 0:
+            return;
+
+        default:
+            cout << "Invalid Option, try again." << endl;
+            system("pause");
+
+        }
+        system("CLS");
+    }
+
 
 
 }
