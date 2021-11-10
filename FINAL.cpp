@@ -41,7 +41,7 @@ struct treatNode* treatHead = NULL;
 patient_data addPatient();
 Node* searchPatientbyID();
 void displayPatient(), removePatient(), treatPatient(), sortPatient(), ascSort(), displayTreated(), insertAtEnd(patient_data data), insertAtEndTreated(patient_data data), sortTreatPatient(), descSort();
-void DoctorSearchOption(), VisitSearchByID(treatNode* temp), VisitSearchByFirstName(), VisitSearchByDisabled();
+void DoctorSearchOption(), VisitSearchByID(treatNode* temp), VisitSearchByFirstName(), VisitSearchByLastName(), VisitSearchByGender(), VisitSearchByDoctor(), VisitSearchByDisabled();
 int patientCount();
 
 
@@ -111,12 +111,11 @@ void start_menu()
     cout << " 3. Exit.\n";
     cout << "\n Selection \t: ";
     cin >> selection;
-    //cout << "************************************************************** \n";
+
     switch (selection)
     {
         case 1:     //nurse login 
         {
-
             cin.clear();
             cin.ignore();
             system("CLS");
@@ -127,12 +126,10 @@ void start_menu()
             }
             else
             {
-
                 cin.clear();
                 cin.ignore();
                 system("CLS");
                 cout << "\n\t\tUSERNAME OR PASSWORD NOT RECOGNISED\n\n";
-
                 start_menu();
             }
 
@@ -174,7 +171,7 @@ void start_menu()
 
 
 
-        default:        //other input than 1 or 2 or 5
+        default:        //other input than 1 or 2 or 3
         {
 
             cin.clear();
@@ -546,7 +543,6 @@ void displayPatient()
 
     cout << "**************************************************************\n";
     cout << "Patient List    :\n";
-    //cout << "\n ID\t"<<"Name\t\t\t\t" << "Gender \t" << "Phone \t\t" << "Address \t\t\t" << "Visit Date \t\t" << "Visit Time \t\t" << "Disability Option \t\n";
 
     printElement("ID ", smallWidth);
     printElement("Name", largeWidth);
@@ -562,8 +558,6 @@ void displayPatient()
     
     while (current!=NULL)
     {
-        //cout <<" "<< current->data.id << "\t" << current->data.firstName << " " << current->data.lastName << "\t\t" << current->data.gender << "\t" << current->data.phone << "\t\t" << current->data.address << "\t\t"
-        //    << current->data.visitDate << "\t\t" << current->data.visitTime << "\t\t\t" << current->data.disabilityOption << "\t\n";
 
         printElement(current->data.id, smallWidth);
         printElement((current->data.firstName)+" "+ (current->data.lastName), largeWidth);
@@ -685,15 +679,15 @@ Node* searchPatientbyID( string id)
     {
         cout << "Not found\n\n";
         if(userType == 1){
-            system("CLS");
+            system("pause");
             nurseMenu();
         }
         else if(userType == 2){
-            system("CLS");
+            system("pause");
             doctorMenu();
         }
         else{
-            system("CLS");
+            system("pause");
             start_menu();
         }
     }
@@ -1400,8 +1394,11 @@ void DoctorSearchOption(){
     cout << "Available options: \n";
     cout << "1. Search by ID and modify\n";
     cout << "2. Search by first name and display\n";
-    cout << "3. Search by disability\n";
-    cout << "4. Back to menu\n";
+    cout << "3. Search by last name and display\n";
+    cout << "4. Search by gender and display\n";
+    cout << "5. Search by doctor name and display\n";
+    cout << "6. Search by disability\n";
+    cout << "7. Back to menu\n";
     cout << "Enter option: ";
     cin >> selection;
 
@@ -1417,14 +1414,32 @@ void DoctorSearchOption(){
         system("CLS");
         VisitSearchByFirstName();
         break;
-    
+
     case 3:
+
+        system("CLS");
+        VisitSearchByLastName();
+        break;
+
+    case 4:
+        
+        system("CLS");
+        VisitSearchByGender();
+        break;
+
+    case 5:
+
+        system("CLS");
+        VisitSearchByDoctor();
+        break;
+
+    case 6:
 
         system("CLS");
         VisitSearchByDisabled();
         break;
 
-    case 4:
+    case 7:
         system("CLS");
         doctorMenu();
         break;
@@ -1656,6 +1671,219 @@ void VisitSearchByFirstName(){
 
     while (temp != NULL){
         if(temp->data.firstName == fNameRef){
+			printElement(temp->data.id, smallWidth);
+            printElement((temp->data.firstName)+" "+ (temp->data.lastName), largeWidth);
+            printElement(temp->data.gender, smallWidth);
+            printElement(temp->data.phone, midWidth);
+            printElement(temp->data.visitDate, midWidth);
+            printElement(temp->data.visitTime, midWidth);
+            printElement(temp->data.disabilityOption, largeWidth);
+		    printElement(temp->data.doctorName, largeWidth);
+		    printElement(temp->data.medicine, smallWidth);
+            cout << endl;
+		}
+        temp = temp->next;
+    }
+
+    cout << "\n\n";
+    system("pause");
+}
+
+void VisitSearchByLastName(){
+    treatNode* temp = treatHead;
+
+    string lNameRef;
+
+    if (temp == NULL)
+    {
+        cin.clear();
+        cin.ignore();
+        system("CLS");
+
+        cout << "\n List is empty.\n";
+        if(userType == 1){
+            system("CLS");
+            nurseMenu();
+        }
+        else if(userType == 2){
+            system("CLS");
+            doctorMenu();
+        }
+        else{
+            system("CLS");
+            start_menu();
+        }
+    }
+
+    cout << "Enter patient last name (case sensitive): ";
+    cin >> lNameRef;
+
+    system("CLS");
+
+    cout << "**************************************************************\n";
+    cout << "Patient List    :\n";
+
+    printElement("ID ", smallWidth);
+    printElement("Name", largeWidth);
+    printElement("Gender", smallWidth);
+    printElement("Phone", midWidth);
+    printElement("Visit Date", midWidth);
+    printElement("Visit Time", midWidth);
+    printElement("Disability Option", largeWidth);
+	printElement("Doctor Name", largeWidth);
+	printElement("Medicine", smallWidth);
+    cout << endl;
+
+    while (temp != NULL){
+        if(temp->data.lastName == lNameRef){
+			printElement(temp->data.id, smallWidth);
+            printElement((temp->data.firstName)+" "+ (temp->data.lastName), largeWidth);
+            printElement(temp->data.gender, smallWidth);
+            printElement(temp->data.phone, midWidth);
+            printElement(temp->data.visitDate, midWidth);
+            printElement(temp->data.visitTime, midWidth);
+            printElement(temp->data.disabilityOption, largeWidth);
+		    printElement(temp->data.doctorName, largeWidth);
+		    printElement(temp->data.medicine, smallWidth);
+            cout << endl;
+		}
+        temp = temp->next;
+    }
+
+    cout << "\n\n";
+    system("pause");
+}
+
+void VisitSearchByGender(){
+    treatNode* temp = treatHead;
+
+    int genderRef;
+    string gender;
+
+    if (temp == NULL)
+    {
+        cin.clear();
+        cin.ignore();
+        system("CLS");
+
+        cout << "\n List is empty.\n";
+        if(userType == 1){
+            system("CLS");
+            nurseMenu();
+        }
+        else if(userType == 2){
+            system("CLS");
+            doctorMenu();
+        }
+        else{
+            system("CLS");
+            start_menu();
+        }
+    }
+
+    cout << "What is patient's gender?\n";
+    cout << "1. Male\n";
+    cout << "2. Female\n";
+    cout << "Enter option: ";
+    cin >> genderRef;
+
+    switch (genderRef){
+        case 1:
+            gender = "M";
+            break;
+        case 2:
+            gender = "F";
+            break;
+        default:
+            system("CLS");
+            cout << "Error input, please try again\n";
+            VisitSearchByGender();
+            break;
+    }
+
+    system("CLS");
+
+    cout << "**************************************************************\n";
+    cout << "Patient List    :\n";
+
+    printElement("ID ", smallWidth);
+    printElement("Name", largeWidth);
+    printElement("Gender", smallWidth);
+    printElement("Phone", midWidth);
+    printElement("Visit Date", midWidth);
+    printElement("Visit Time", midWidth);
+    printElement("Disability Option", largeWidth);
+	printElement("Doctor Name", largeWidth);
+	printElement("Medicine", smallWidth);
+    cout << endl;
+
+    while (temp != NULL){
+        if(temp->data.gender == gender){
+			printElement(temp->data.id, smallWidth);
+            printElement((temp->data.firstName)+" "+ (temp->data.lastName), largeWidth);
+            printElement(temp->data.gender, smallWidth);
+            printElement(temp->data.phone, midWidth);
+            printElement(temp->data.visitDate, midWidth);
+            printElement(temp->data.visitTime, midWidth);
+            printElement(temp->data.disabilityOption, largeWidth);
+		    printElement(temp->data.doctorName, largeWidth);
+		    printElement(temp->data.medicine, smallWidth);
+            cout << endl;
+		}
+        temp = temp->next;
+    }
+
+    cout << "\n\n";
+    system("pause");
+}
+
+void VisitSearchByDoctor(){
+    treatNode* temp = treatHead;
+
+    string dNameRef;
+
+    if (temp == NULL)
+    {
+        cin.clear();
+        cin.ignore();
+        system("CLS");
+
+        cout << "\n List is empty.\n";
+        if(userType == 1){
+            system("CLS");
+            nurseMenu();
+        }
+        else if(userType == 2){
+            system("CLS");
+            doctorMenu();
+        }
+        else{
+            system("CLS");
+            start_menu();
+        }
+    }
+
+    cout << "Enter patient's doctor's name (case sensitive): ";
+    cin >> dNameRef;
+
+    system("CLS");
+
+    cout << "**************************************************************\n";
+    cout << "Patient List    :\n";
+
+    printElement("ID ", smallWidth);
+    printElement("Name", largeWidth);
+    printElement("Gender", smallWidth);
+    printElement("Phone", midWidth);
+    printElement("Visit Date", midWidth);
+    printElement("Visit Time", midWidth);
+    printElement("Disability Option", largeWidth);
+	printElement("Doctor Name", largeWidth);
+	printElement("Medicine", smallWidth);
+    cout << endl;
+
+    while (temp != NULL){
+        if(temp->data.doctorName == dNameRef){
 			printElement(temp->data.id, smallWidth);
             printElement((temp->data.firstName)+" "+ (temp->data.lastName), largeWidth);
             printElement(temp->data.gender, smallWidth);
